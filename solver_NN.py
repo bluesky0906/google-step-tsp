@@ -10,9 +10,9 @@ def solve(cities):
     N = len(cities)
     # まだ探していない都市
     unvisited_cities = set(range(N))
-    start_city = 0
-    tour = [start_city]
-    unvisited_cities.remove(start_city)
+
+    tour = [0]
+    unvisited_cities.remove(0)
 
     while unvisited_cities:
         dist = [float('inf')] * N

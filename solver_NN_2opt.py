@@ -1,13 +1,15 @@
 import sys
 
+# 改善アルゴリズム 2-opt
+
 from common import print_tour, read_input
 import solver_greedy
-import solver_random
+import solver_NN
 
 
 def solve(cities):
-    # とりあえず貪欲法で解く
-    tours = solver_greedy.solve(cities)
+    # とりあえずNN法で解く
+    tours = solver_NN.solve(cities)
 
     N = len(tours)
     can_swap = True
@@ -18,6 +20,9 @@ def solve(cities):
             dis1 = solver_greedy.distance(
                 cities[tours[i]], cities[tours[i+1]])
             for j in range(i+2, N):
+                # 周りの10ノードくらいまでを計算
+                if j > i+12:
+                    break
                 if j == N - 1:
                     dis2 = solver_greedy.distance(
                         cities[tours[j]], cities[tours[0]])
