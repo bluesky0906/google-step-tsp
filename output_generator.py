@@ -1,20 +1,17 @@
-from common import format_tour, read_input
+import shutil
 
-import solver_mysolution
-# 進捗バー表示
-from tqdm import tqdm
+from my_output_generator import choose_mode
+
+# どの自分の解放をoutputにするか選ぶ
 
 CHALLENGES = 7
 
 
-def generate_sample_output():
-    for i in tqdm(range(CHALLENGES)):
-        print(i)
-        cities = read_input(f'input_{i}.csv')
-        tour = solver_mysolution.solve(cities)
-        with open(f'output_{i}.csv', 'w') as f:
-            f.write(format_tour(tour) + '\n')
+def generate_sample_output(name):
+    for i in range(CHALLENGES):
+        shutil.copyfile(f'my_output/{name}_{i}.csv', f'output_{i}.csv')
 
 
 if __name__ == '__main__':
-    generate_sample_output()
+    _, name = choose_mode()
+    generate_sample_output(name)
