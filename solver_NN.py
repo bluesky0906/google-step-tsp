@@ -1,28 +1,31 @@
 # NearestNeighbor法
-
+# greedyと一緒で、探索を始める都市を指定することができる
 import sys
 
 import solver_greedy
 from common import print_tour, read_input
 
 
-def solve(cities):
+def solve(cities, start_city=0):
     N = len(cities)
-    # まだ探していない都市
-    unvisited_cities = set(range(N))
 
-    tour = [0]
-    unvisited_cities.remove(0)
+    dist = [[0] * N for i in range(N)]
+    for i in range(N):
+        for j in range(i, N):
+            dist[i][j] = dist[j][i] = solver_greedy.distance(
+                cities[i], cities[j])
+
+    unvisited_cities = set(range(0, N))
+    unvisited_cities.remove(start_city)
+    tour = [start_city]
+    current_city = start_city
 
     while unvisited_cities:
-        dist = [float('inf')] * N
-        for i, city in enumerate(unvisited_cities):
-            current_city = tour[-1]
-            dist[city] = solver_greedy.distance(
-                cities[city], cities[current_city])
-        next_city = dist.index(min(dist))
-        tour.append(next_city)
+        next_city = min(unvisited_cities,
+                        key=lambda city: dist[current_city][city])
         unvisited_cities.remove(next_city)
+        tour.append(next_city)
+        current_city = next_city
     return tour
 
 

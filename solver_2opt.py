@@ -4,25 +4,22 @@ import sys
 
 from common import print_tour, read_input
 import solver_greedy
-import solver_NN
 
 
-def solve(cities):
-    # とりあえずNN法で解く
-    tours = solver_NN.solve(cities)
+def solve(cities, solver=solver_greedy):
+    # 何かしらのアルゴリズムで解く
+    tours = solver.solve(cities)
 
     N = len(tours)
     can_swap = True
+    count = 0
     while can_swap:
         can_swap = False
         # 2つの辺を考えて、入れ替えた方が2つの辺の距離の和が短くなる場合は、入れ替える
-        for i in range(N - 2):
+        for i in range(count, N - 2):
             dis1 = solver_greedy.distance(
                 cities[tours[i]], cities[tours[i+1]])
             for j in range(i+2, N):
-                # 周りの10ノードくらいまでを計算
-                if j > i+12:
-                    break
                 if j == N - 1:
                     dis2 = solver_greedy.distance(
                         cities[tours[j]], cities[tours[0]])
@@ -41,6 +38,7 @@ def solve(cities):
                 if dis1 + dis2 > dis3 + dis4:
                     can_swap = True
                     tours[i+1], tours[j] = tours[j], tours[i+1]
+                    count = i
                     break
             if can_swap:
                 break
