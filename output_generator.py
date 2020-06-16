@@ -13,5 +13,5 @@ def generate_sample_output(name):
 
 
 if __name__ == '__main__':
-    _, name = choose_mode()
+    _, name, _ = choose_mode()
     generate_sample_output(name)
