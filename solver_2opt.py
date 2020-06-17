@@ -1,49 +1,45 @@
 import sys
 
 # 改善アルゴリズム 2-opt
-
+# 2つの辺ab, cdを考えて、
+# ab + cd よりも ac + bdの方が短ければ
+# 入れ替える
 from common import print_tour, read_input
-import solver_greedy
+import solver_NN
 
 
-def solve(cities, solver=solver_greedy):
-    # 何かしらのアルゴリズムで解く
-    tours = solver.solve(cities)
+def solve(cities, tour=None):
+    N = len(cities)
 
-    N = len(tours)
-    can_swap = True
-    count = 0
-    while can_swap:
-        can_swap = False
-        # 2つの辺を考えて、入れ替えた方が2つの辺の距離の和が短くなる場合は、入れ替える
-        for i in range(count, N - 2):
-            dis1 = solver_greedy.distance(
-                cities[tours[i]], cities[tours[i+1]])
+    if not tour:
+        tour = solver_NN.solve(cities)
+
+    # 全ての距離
+    dist = solver_NN.all_distance(cities)
+
+    while True:
+        count = 0
+        for i in range(N-2):
+            a = tour[i]
+            b = tour[i+1]
+            ab = dist[a][b]
             for j in range(i+2, N):
+                c = tour[j]
                 if j == N - 1:
-                    dis2 = solver_greedy.distance(
-                        cities[tours[j]], cities[tours[0]])
-                    dis3 = solver_greedy.distance(
-                        cities[tours[i]], cities[tours[j]])
-                    dis4 = solver_greedy.distance(
-                        cities[tours[i+1]], cities[tours[0]])
+                    d = tour[0]
                 else:
-                    dis2 = solver_greedy.distance(
-                        cities[tours[j]], cities[tours[j+1]])
-                    dis3 = solver_greedy.distance(
-                        cities[tours[i]], cities[tours[j]])
-                    dis4 = solver_greedy.distance(
-                        cities[tours[i+1]], cities[tours[j+1]])
+                    d = tour[j+1]
+                cd = dist[c][d]
+                ac = dist[a][c]
+                bd = dist[b][d]
                 # 入れ替え
-                if dis1 + dis2 > dis3 + dis4:
-                    can_swap = True
-                    tours[i+1], tours[j] = tours[j], tours[i+1]
-                    count = i
-                    break
-            if can_swap:
-                break
+                if ab + cd > ac + bd:
+                    tour[i+1], tour[j] = tour[j], tour[i+1]
+                    count += 1
+        if not count:
+            break
 
-    return tours
+    return tour
 
 
 if __name__ == '__main__':
