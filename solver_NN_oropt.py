@@ -1,26 +1,20 @@
 import sys
 
-# NN + 改善アルゴリズム 1.5-opt
-# ある隣接した都市(A),(B)と、単一の都市(C)を選択する。 都市(C)の巡回路上での前の都市を(P)、次の都市を(N)とする。
-# もし、都市間の距離 AC + CB + PNが AB + PC + CN よりも小さいならば
-# PとNを繋ぎ、CをAーB間に挿入する
+# NN + 改善アルゴリズム Or-opt
+# ある都市Aを他の辺に挿入したとき経路が改善されるならば
+# 入れ替える
 
 from common import print_tour, read_input, get_tour_length, get_all_distance
 import solver_NN
 
 
-# もし、都市間の距離 AC + CB + PNが AB + PC + CN よりも小さいならば
-# PとNを繋ぎ、CをAーB間に挿入する
 def swap_path(tour, i, j, dist):
-    A, B = tour[i], tour[i+1]
-    C, P, N = tour[j], tour[j-1], tour[(j+1) % len(tour)]
-    # ac + cb + pn
-    dis1 = dist[A][C] + dist[C][B] + dist[P][N]
-    # ab + pc + cn
-    dis2 = dist[A][B] + dist[P][C] + dist[C][N]
-    if dis1 < dis2:
-        tour.remove(C)
-        tour.insert(i+1, C)
+    A = tour[i]
+    swaped_tour = tour.copy()
+    swaped_tour.remove(A)
+    swaped_tour.insert(j, A)
+    if get_tour_length(swaped_tour, dist) > get_tour_length(tour, dist):
+        tour = swaped_tour
 
 
 def improve_tour(dist, tour):
@@ -29,7 +23,7 @@ def improve_tour(dist, tour):
     while can_improve:
         original_length = get_tour_length(tour, dist)
         for i in range(N):
-            for j in range(i+3, N):
+            for j in range(N):
                 swap_path(tour, i, j, dist)
         if get_tour_length(tour, dist) >= original_length:
             can_improve = False
@@ -43,7 +37,6 @@ def solve_each(dist, start_city=0):
 
 def solve(cities):
     N = len(cities)
-
     # 全ての距離
     dist = get_all_distance(cities)
     tours = []
