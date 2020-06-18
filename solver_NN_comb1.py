@@ -1,30 +1,24 @@
 import sys
 
-# NearestNeighbor法
-# greedyと一緒で、探索を始める都市を指定することができる
+# 改善アルゴリズム 2-opt + 1.5-opt
 
 from common import print_tour, read_input, get_all_distance, get_tour_length
+import solver_NN
+import solver_NN_2opt
+import solver_NN_1_5opt
 
 
 def solve_each(dist, start_city=0):
-    N = len(dist[0])
-
-    unvisited_cities = set(range(0, N))
-    unvisited_cities.remove(start_city)
-    tour = [start_city]
-    current_city = start_city
-
-    while unvisited_cities:
-        next_city = min(unvisited_cities,
-                        key=lambda city: dist[current_city][city])
-        unvisited_cities.remove(next_city)
-        tour.append(next_city)
-        current_city = next_city
+    tour = solver_NN.solve_each(dist, start_city)
+    solver_NN_2opt.improve_tour(dist, tour)
+    solver_NN_1_5opt.improve_tour(dist, tour)
     return tour
 
 
 def solve(cities):
     N = len(cities)
+
+    # 全ての距離
     dist = get_all_distance(cities)
     tours = []
     # スタート地点を変えて実行する
@@ -34,6 +28,7 @@ def solve(cities):
     shortest_tour = tours[tours_length.index(min(tours_length))]
     # 一番短い経路を返す
     return shortest_tour
+    return tour
 
 
 if __name__ == '__main__':

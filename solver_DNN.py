@@ -1,10 +1,9 @@
-# DivisionNearestNeighbor法
-
 import sys
 
-import solver_greedy
+# DivisionNearestNeighbor法
+
 import solver_NN
-from common import print_tour, read_input
+from common import print_tour, read_input, get_all_distance
 
 
 # 与えられた2点から直線を返す
@@ -24,11 +23,7 @@ def solve(cities):
     N = len(cities)
 
     # 最も離れた都市を求める
-    dist = [[0] * N for i in range(N)]
-    for i in range(N):
-        for j in range(i, N):
-            dist[i][j] = dist[j][i] = solver_greedy.distance(
-                cities[i], cities[j])
+    dist = get_all_distance(cities)
     max_value = 0
     max_city1 = 0
     for i in range(N):
@@ -37,7 +32,6 @@ def solve(cities):
             max_value = local_max
             max_city1 = i
     max_city2 = dist[max_city1].index(max_value)
-
     # 2つの都市を通る直線で２つに分ける
     line = make_linear_function(cities[max_city1], cities[max_city2])
     group1 = [max_city1]
@@ -67,10 +61,12 @@ def solve(cities):
 
     # max_city1を開始都市として、group1に対してNN法を行う
     group1_cities = [cities[city] for city in group1]
-    tour1 = solver_NN.solve(group1_cities)
+    group1_dist = get_all_distance(group1_cities)
+    tour1 = solver_NN.solve_each(group1_dist, 0)
     # max_city2を開始都市として、group2に対してNN法を行う
     group2_cities = [cities[city] for city in group2]
-    tour2 = solver_NN.solve(group2_cities)
+    group2_dist = get_all_distance(group2_cities)
+    tour2 = solver_NN.solve_each(group2_dist, 0)
     # それぞれをつなげる
     tour = [group1[i] for i in tour1] + [group2[i] for i in tour2]
     return tour
@@ -78,5 +74,5 @@ def solve(cities):
 
 if __name__ == '__main__':
     assert len(sys.argv) > 1
-    tour = solve(read_input(sys.argv[1]), 0)
+    tour = solve(read_input(sys.argv[1]))
     print_tour(tour)
