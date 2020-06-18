@@ -13,7 +13,7 @@ def solve(cities):
     dist = get_all_distance(cities)
 
     tour = solver_DNN.solve(cities)
-    tour = solver_NN_2opt.improve_tour(dist, tour)
+    solver_NN_2opt.improve_tour(dist, tour)
     return tour
 
 

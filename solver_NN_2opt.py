@@ -60,13 +60,7 @@ def improve_tour(dist, tour):
     while can_improve:
         original_length = get_tour_length(tour, dist)
         for i in range(N):
-            # 計算量削減のため近傍都市(かつ経路でiより後ろの都市)のみ探索
-            neighbor_city = get_neighbor_city(dist[i])
-            remaining_tour = set(tour[i+1:])
-            neighbor_city_index = [
-                tour.index(city) for city in neighbor_city & remaining_tour]
-            for j in neighbor_city_index:
-                # for j in range(i+2, N):
+            for j in range(i+2, N):
                 swap_path(tour, i, j, dist)
         if get_tour_length(tour, dist) >= original_length:
             can_improve = False

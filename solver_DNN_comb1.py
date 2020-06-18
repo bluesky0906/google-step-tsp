@@ -4,15 +4,20 @@ import sys
 
 from common import print_tour, read_input, get_all_distance
 import solver_DNN
-import solver_NN_comb1
+import solver_NN_2opt
+import solver_NN_oropt
 
 
 def solve(cities):
+    N = len(cities)
     # 全ての距離
     dist = get_all_distance(cities)
 
     tour = solver_DNN.solve(cities)
-    solver_NN_comb1.improve_tour(dist, tour)
+    solver_NN_2opt.improve_tour(dist, tour)
+    # challenge4からは閾値ありで実行
+    if N >= 128:
+        solver_NN_oropt.improve_tour2(dist, tour)
     return tour
 
 

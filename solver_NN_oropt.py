@@ -29,6 +29,21 @@ def improve_tour(dist, tour):
             can_improve = False
 
 
+def improve_tour2(dist, tour):
+    N = len(tour)
+    can_improve = True
+    while can_improve:
+        original_length = get_tour_length(tour, dist)
+        for i in range(N):
+            # 閾値を超えている都市にだけ適用
+            if dist[i][(i+1) % N] + dist[(i+1) % N][(i+2) % N] < 100:
+                continue
+            for j in range(N):
+                swap_path(tour, i, j, dist)
+        if get_tour_length(tour, dist) >= original_length:
+            can_improve = False
+
+
 def solve_each(dist, start_city=0):
     tour = solver_NN.solve_each(dist, start_city)
     improve_tour(dist, tour)
