@@ -4,8 +4,9 @@ import solver_NN
 import solver_DNN
 import solver_NN_2opt
 import solver_DNN_2opt
-import solver_NN_1_5opt
 import solver_NN_comb1
+import solver_DNN_comb1
+
 
 # outputファイルをmy_outputに出力
 
@@ -24,12 +25,11 @@ def choose_mode():
         solver = solver_NN_2opt
     elif mode == 'DNN_2opt':
         solver = solver_DNN_2opt
-    elif mode == 'NN_1_5opt':
-        solver = solver_NN_1_5opt
-    elif mode == 'DNN_1_5opt':
-        solver = solver_NN_1_5opt
     elif mode == 'NN_comb1':
         solver = solver_NN_comb1
+    elif mode == 'DNN_comb1':
+        solver = solver_DNN_comb1
+
     else:
         exit(1)
     return (solver, mode)
