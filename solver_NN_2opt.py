@@ -75,9 +75,9 @@ def solve_each(dist, start_city=0):
 def solve(cities):
     N = len(cities)
     start_points = range(N)
-    # challenge4からはランダムな点で実行
+    # challenge6はランダムな点一つで実行
     if N >= 2048:
-        start_points = [random.randint(0, N) for _ in range(600)]
+        start_points = [random.randint(0, N-1)]
     # 全ての距離
     dist = get_all_distance(cities)
     tours = []

@@ -6,10 +6,10 @@ import solver_NN_2opt
 import solver_DNN_2opt
 import solver_NN_comb1
 import solver_DNN_comb1
+import solver_NN_comb2
 
 
 # outputファイルをmy_outputに出力
-
 CHALLENGES = 7
 
 
@@ -29,6 +29,8 @@ def choose_mode():
         solver = solver_NN_comb1
     elif mode == 'DNN_comb1':
         solver = solver_DNN_comb1
+    elif mode == 'NN_comb2':
+        solver = solver_NN_comb2
 
     else:
         exit(1)
@@ -37,6 +39,7 @@ def choose_mode():
 
 def generate_sample_output(solver, name):
     for i in range(CHALLENGES):
+    # for i in [6]:
         print(i)
         cities = read_input(f'input_{i}.csv')
         tour = solver.solve(cities)
