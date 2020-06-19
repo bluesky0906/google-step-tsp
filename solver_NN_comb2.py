@@ -1,7 +1,8 @@
 import sys
 import random
 
-# N+ 改善アルゴリズム 2-opt + oropt法
+# NN + 改善アルゴリズム 2-opt + oropt法
+# NN + 2-opt + oropt法を探索のスタート位置を変えて実行
 
 from common import print_tour, read_input, get_all_distance, get_tour_length
 import solver_NN
@@ -10,15 +11,11 @@ import solver_NN_oropt
 
 
 def solve_each(dist, start_city):
-    N = len(dist[start_city])
     tour = solver_NN.solve_each(dist, start_city)
     solver_NN_2opt.improve_tour(dist, tour)
-    # challenge4からは閾値ありで実行
-    if N >= 64:
-        solver_NN_oropt.improve_tour2(dist, tour)
-    else:
-        solver_NN_oropt.improve_tour(dist, tour)
+    solver_NN_oropt.improve_tour(dist, tour)
     return tour
+
 
 def solve(cities):
     N = len(cities)

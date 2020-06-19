@@ -13,8 +13,9 @@ def swap_path(tour, i, j, dist):
     swaped_tour = tour.copy()
     swaped_tour.remove(A)
     swaped_tour.insert(j, A)
-    if get_tour_length(swaped_tour, dist) > get_tour_length(tour, dist):
-        tour = swaped_tour
+    if get_tour_length(swaped_tour, dist) < get_tour_length(tour, dist):
+        tour.remove(A)
+        tour.insert(j, A)
 
 
 def improve_tour(dist, tour):
@@ -46,7 +47,7 @@ def improve_tour2(dist, tour):
 
 def solve_each(dist, start_city=0):
     tour = solver_NN.solve_each(dist, start_city)
-    improve_tour2(dist, tour)
+    improve_tour(dist, tour)
     return tour
 
 
