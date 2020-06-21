@@ -38,8 +38,7 @@ def choose_mode():
 
 
 def generate_sample_output(solver, name):
-    #for i in range(CHALLENGES):
-    for i in [6]:
+    for i in range(CHALLENGES):
         print(i)
         cities = read_input(f'input_{i}.csv')
         tour = solver.solve(cities)
